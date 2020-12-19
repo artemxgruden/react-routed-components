@@ -1,15 +1,17 @@
-const getCurrentPathOnClient = require('./get-current-path-on-client.js');
+const getCurrentPathOnClient = require("./get-current-path-on-client.js");
 
 const redirect = (path) => {
-	const currentPath = getCurrentPathOnClient();
+  const currentPath = getCurrentPathOnClient();
 
-	if (currentPath === path) {
-		return;
-	}
+  if (currentPath === path) {
+    return;
+  }
 
-	const redirectEvent = new CustomEvent('pathRedirection', {detail: {path}});
-	window.dispatchEvent(redirectEvent);
-	history.pushState({}, '', path);
+  const redirectEvent = new CustomEvent("pathRedirection", {
+    detail: { path },
+  });
+  window.dispatchEvent(redirectEvent);
+  history.pushState({}, "", path);
 };
 
 module.exports = redirect;

@@ -1,57 +1,57 @@
-const {useState, useEffect} = require('react');
+const { useState, useEffect } = require("react");
 
-const checkIsOnClient = require('./check-is-on-client.js');
-const checkPathIsMatched = require('./check-path-is-matched.js');
-const getCurrentPathOnClient = require('./get-current-path-on-client.js');
-const listenPathRedirectionEvent = require('./listen-path-redirection-event.js');
+const checkIsOnClient = require("./check-is-on-client.js");
+const checkPathIsMatched = require("./check-path-is-matched.js");
+const getCurrentPathOnClient = require("./get-current-path-on-client.js");
+const listenPathRedirectionEvent = require("./listen-path-redirection-event.js");
 
 const usePath = (props) => {
-	const {
-		initialPath = null,
-		path = null,
-		pathIsStrict = false,
+  const {
+    initialPath = null,
+    path = null,
+    pathIsStrict = false,
 
-		pathRegExp = null,
-		pathRegExpGroupNames = null,
+    pathRegExp = null,
+    pathRegExpGroupNames = null,
 
-		componentIsWrapper = false,
-		checkPathRedirection = () => false,
-	} = props;
+    componentIsWrapper = false,
+    checkPathRedirection = () => false,
+  } = props;
 
-	const [pathIsMatched, setPathIsMatched] = useState(
-		checkPathIsMatched({
-			currentPath: checkIsOnClient() ? getCurrentPathOnClient() : initialPath,
+  const [pathIsMatched, setPathIsMatched] = useState(
+    checkPathIsMatched({
+      currentPath: checkIsOnClient() ? getCurrentPathOnClient() : initialPath,
 
-			path,
-			pathIsStrict,
+      path,
+      pathIsStrict,
 
-			pathRegExp,
-			pathRegExpGroupNames,
+      pathRegExp,
+      pathRegExpGroupNames,
 
-			componentIsWrapper,
-		})
-	);
+      componentIsWrapper,
+    })
+  );
 
-	const handlePathRedirectionEvent = (event) => {
-		const redirectionPath = event.detail.path;
+  const handlePathRedirectionEvent = (event) => {
+    const redirectionPath = event.detail.path;
 
-		const pathIsMatched = checkPathIsMatched({
-			currentPath: redirectionPath,
-			path,
-			pathIsStrict,
+    const pathIsMatched = checkPathIsMatched({
+      currentPath: redirectionPath,
+      path,
+      pathIsStrict,
 
-			pathRegExp,
-			pathRegExpGroupNames,
+      pathRegExp,
+      pathRegExpGroupNames,
 
-			componentIsWrapper,
-		});
+      componentIsWrapper,
+    });
 
-		setPathIsMatched(pathIsMatched);
-	};
+    setPathIsMatched(pathIsMatched);
+  };
 
-	listenPathRedirectionEvent(handlePathRedirectionEvent);
+  listenPathRedirectionEvent(handlePathRedirectionEvent);
 
-	return {pathIsMatched};
+  return { pathIsMatched };
 };
 
 module.exports = usePath;

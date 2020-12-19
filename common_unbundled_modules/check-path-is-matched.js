@@ -1,28 +1,28 @@
 const checkPathIsMatched = (props) => {
-	const {
-		currentPath,
-		path,
-		pathIsStrict,
+  const {
+    currentPath,
+    path,
+    pathIsStrict,
 
-		pathRegExp,
-		pathRegExpGroupNames,
+    pathRegExp,
+    pathRegExpGroupNames,
 
-		componentIsWrapper
-	} = props;
+    componentIsWrapper,
+  } = props;
 
-	if (pathRegExp) {
-		return pathRegExp.test(currentPath);
-	}
+  if (pathRegExp) {
+    return pathRegExp.test(currentPath);
+  }
 
-	if (pathIsStrict) {
-		return path === currentPath;
-	}
+  if (pathIsStrict) {
+    return path === currentPath;
+  }
 
-	if (componentIsWrapper) {
-		return currentPath ? currentPath.startsWith(path) : false;
-	}
+  if (componentIsWrapper) {
+    return currentPath ? currentPath.startsWith(path) : false;
+  }
 
-	return currentPath ? currentPath.split('?')[0] === path : false;
+  return currentPath ? currentPath.split("?")[0] === path : false;
 };
 
 module.exports = checkPathIsMatched;

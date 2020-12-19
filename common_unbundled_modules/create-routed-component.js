@@ -1,96 +1,102 @@
-const {createElement, useContext} = require('react');
+const { createElement, useContext } = require("react");
 
-const {initialPathContext} = require('./contexts.js');
-const useDocumentTitle = require('./use-document-title.js');
-const usePath = require('./use-path.js');
-const checkIsOnClient = require('./check-is-on-client.js');
-const getCurrentPathOnClient = require('./get-current-path-on-client.js');
+const { initialPathContext } = require("./contexts.js");
+const useDocumentTitle = require("./use-document-title.js");
+const usePath = require("./use-path.js");
+const checkIsOnClient = require("./check-is-on-client.js");
+const getCurrentPathOnClient = require("./get-current-path-on-client.js");
 
 const createRoutedComponent = (props) => {
-	const {
-		component = () => '',
-		path = '/',
-		pathIsStrict = false,
-		pathRegExp = null,
-		pathRegExpGroupNames = null,
-		componentIsWrapper = false,
-		documentTitle = null,
-		checkPathRedirection = () => false
-	} = props;
+  const {
+    component = () => "",
+    path = "/",
+    pathIsStrict = false,
+    pathRegExp = null,
+    pathRegExpGroupNames = null,
+    componentIsWrapper = false,
+    documentTitle = null,
+    checkPathRedirection = () => false,
+  } = props;
 
-	const RoutedComponent = (_props) => {
-		const initialPath = useContext(initialPathContext);
+  const RoutedComponent = (_props) => {
+    const initialPath = useContext(initialPathContext);
 
-		const currentPath = checkIsOnClient() ? getCurrentPathOnClient() : initialPath;
-	
-		const {pathIsMatched} = usePath({
-			initialPath,
-			path,
-			pathIsStrict,
+    const currentPath = checkIsOnClient()
+      ? getCurrentPathOnClient()
+      : initialPath;
 
-			pathRegExp,
-			pathRegExpGroupNames,
+    const { pathIsMatched } = usePath({
+      initialPath,
+      path,
+      pathIsStrict,
 
-			componentIsWrapper,
-			checkPathRedirection
-		});
+      pathRegExp,
+      pathRegExpGroupNames,
 
-		useDocumentTitle(pathIsMatched, documentTitle);
+      componentIsWrapper,
+      checkPathRedirection,
+    });
 
-		let pathParameters = null;
+    useDocumentTitle(pathIsMatched, documentTitle);
 
-		if (pathIsMatched && pathRegExp && pathRegExpGroupNames) {
-			const matchResult = pathRegExp.exec(currentPath);
-			pathParameters = pathRegExpGroupNames.map((k, i) => {
-				return {[k]: matchResult[i + 1]};
-			}).reduce((result, current) => {
-				return Object.assign(result, current);
-			}, {});
-		}
+    let pathParameters = null;
 
-		return pathIsMatched
-			? createElement(component, {
-					path,
-					pathIsStrict,
-					componentIsWrapper,
-					documentTitle,
-					pathParameters
-				},
-				_props.children
-			)
-			: null;
-	};
+    if (pathIsMatched && pathRegExp && pathRegExpGroupNames) {
+      const matchResult = pathRegExp.exec(currentPath);
+      pathParameters = pathRegExpGroupNames
+        .map((k, i) => {
+          return { [k]: matchResult[i + 1] };
+        })
+        .reduce((result, current) => {
+          return Object.assign(result, current);
+        }, {});
+    }
 
-	const propertyNames = Object.getOwnPropertyNames(component);
+    return pathIsMatched
+      ? createElement(
+          component,
+          {
+            path,
+            pathIsStrict,
+            componentIsWrapper,
+            documentTitle,
+            pathParameters,
+          },
+          _props.children
+        )
+      : null;
+  };
 
-	for (const propertyName of propertyNames) {
-		if (
-			propertyName !== 'length' &&
-			propertyName !== 'prototype' &&
-			propertyName !== 'name' &&
-			propertyName !== 'getDerivedStateFromProps'
-		) {
-			RoutedComponent[propertyName] = component[propertyName];
-		}
-	}
+  const propertyNames = Object.getOwnPropertyNames(component);
 
-	for (const key of Object.keys(component)) {
-		RoutedComponent[key] = component[key];
-	}
+  for (const propertyName of propertyNames) {
+    if (
+      propertyName !== "length" &&
+      propertyName !== "prototype" &&
+      propertyName !== "name" &&
+      propertyName !== "getDerivedStateFromProps"
+    ) {
+      RoutedComponent[propertyName] = component[propertyName];
+    }
+  }
 
-	RoutedComponent.path = path;
-	RoutedComponent.pathIsStrict = pathIsStrict;
+  for (const key of Object.keys(component)) {
+    RoutedComponent[key] = component[key];
+  }
 
-	RoutedComponent.pathRegExp = pathRegExp;
-	RoutedComponent.pathRegExpGroupNames = pathRegExpGroupNames;
+  RoutedComponent.path = path;
+  RoutedComponent.pathIsStrict = pathIsStrict;
 
-	RoutedComponent.componentIsWrapper = componentIsWrapper;
-	RoutedComponent.checkPathRedirection = checkPathRedirection;
-	RoutedComponent.documentTitle = documentTitle;
+  RoutedComponent.pathRegExp = pathRegExp;
+  RoutedComponent.pathRegExpGroupNames = pathRegExpGroupNames;
 
-	RoutedComponent.component = component;
+  RoutedComponent.componentIsWrapper = componentIsWrapper;
+  RoutedComponent.checkPathRedirection = checkPathRedirection;
+  RoutedComponent.documentTitle = documentTitle;
 
-	return RoutedComponent;
+  RoutedComponent.component = component;
+
+  return RoutedComponent;
 };
 
 module.exports = createRoutedComponent;

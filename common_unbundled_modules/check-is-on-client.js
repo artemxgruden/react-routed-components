@@ -1,5 +1,5 @@
 const checkIsOnClient = () => {
-	return typeof window === 'undefined' ? false : true;
+  return typeof window === "undefined" ? false : true;
 };
 
 module.exports = checkIsOnClient;
