@@ -1,6 +1,6 @@
 {
   "name": "react-routed-components",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "",
   "main": "./common_unbundled_modules/main.js",
   "scripts": {
