@@ -1,17 +1,15 @@
 const checkPathIsMatched = require("./check-path-is-matched.js");
 
 const checkPathIsNotMatched = (children, currentPath) => {
-  return !children.some((child) =>
-    checkPathIsMatched({
-      currentPath,
-      path: child.path,
-      pathIsStrict: child.pathIsStrict,
-
-      pathRegExp: child.pathRegExp,
-      pathRegExpGroupNames: child.pathRegExpGroupNames,
-
-      componentIsWrapper: child.componentIsWrapper,
-    })
+  return !children.some(
+    ({ path, pathIsStrict, pathRegExp, wrappedComponentIsWrapper }) =>
+      checkPathIsMatched({
+        currentPath,
+        path,
+        pathIsStrict,
+        pathRegExp,
+        wrappedComponentIsWrapper,
+      })
   );
 };
 

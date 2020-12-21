@@ -5,30 +5,21 @@ const checkPathIsMatched = require("./check-path-is-matched.js");
 const getCurrentPathOnClient = require("./get-current-path-on-client.js");
 const listenPathRedirectionEvent = require("./listen-path-redirection-event.js");
 
-const usePath = (props) => {
-  const {
-    initialPath = null,
-    path = null,
-    pathIsStrict = false,
-
-    pathRegExp = null,
-    pathRegExpGroupNames = null,
-
-    componentIsWrapper = false,
-    checkPathRedirection = () => false,
-  } = props;
-
+const usePath = ({
+  initialPath = null,
+  path = null,
+  pathIsStrict = false,
+  pathRegExp = null,
+  wrappedComponentIsWrapper = false,
+  checkPathRedirection = () => false,
+} = {}) => {
   const [pathIsMatched, setPathIsMatched] = useState(
     checkPathIsMatched({
       currentPath: checkIsOnClient() ? getCurrentPathOnClient() : initialPath,
-
       path,
       pathIsStrict,
-
       pathRegExp,
-      pathRegExpGroupNames,
-
-      componentIsWrapper,
+      wrappedComponentIsWrapper,
     })
   );
 
@@ -39,11 +30,8 @@ const usePath = (props) => {
       currentPath: redirectionPath,
       path,
       pathIsStrict,
-
       pathRegExp,
-      pathRegExpGroupNames,
-
-      componentIsWrapper,
+      wrappedComponentIsWrapper,
     });
 
     setPathIsMatched(pathIsMatched);

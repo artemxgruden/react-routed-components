@@ -9,6 +9,7 @@ const useCurrentPath = () => {
   const initialPath = checkIsOnClient()
     ? getCurrentPathOnClient()
     : useContext(initialPathContext);
+
   const [currentPath, setCurrentPath] = useState(initialPath);
 
   const handlePathRedirectionEvent = (event) => {

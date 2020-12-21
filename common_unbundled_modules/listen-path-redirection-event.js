@@ -1,11 +1,19 @@
 const { useEffect } = require("react");
 
+const { PATH_REDIRECTION_EVENT_NAME } = require("./constants.js");
+
 const listenRedirectionEvent = (handlePathRedirectionEvent) => {
   useEffect(() => {
-    window.addEventListener("pathRedirection", handlePathRedirectionEvent);
+    window.addEventListener(
+      PATH_REDIRECTION_EVENT_NAME,
+      handlePathRedirectionEvent
+    );
 
     return () =>
-      window.removeEventListener("pathRedirection", handlePathRedirectionEvent);
+      window.removeEventListener(
+        PATH_REDIRECTION_EVENT_NAME,
+        handlePathRedirectionEvent
+      );
   });
 };
 

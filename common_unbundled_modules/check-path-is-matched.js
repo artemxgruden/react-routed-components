@@ -1,15 +1,10 @@
-const checkPathIsMatched = (props) => {
-  const {
-    currentPath,
-    path,
-    pathIsStrict,
-
-    pathRegExp,
-    pathRegExpGroupNames,
-
-    componentIsWrapper,
-  } = props;
-
+const checkPathIsMatched = ({
+  currentPath,
+  path,
+  pathIsStrict,
+  pathRegExp,
+  wrappedComponentIsWrapper,
+} = {}) => {
   if (pathRegExp) {
     return pathRegExp.test(currentPath);
   }
@@ -18,7 +13,7 @@ const checkPathIsMatched = (props) => {
     return path === currentPath;
   }
 
-  if (componentIsWrapper) {
+  if (wrappedComponentIsWrapper) {
     return currentPath ? currentPath.startsWith(path) : false;
   }
 
